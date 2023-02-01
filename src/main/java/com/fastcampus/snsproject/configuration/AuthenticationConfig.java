@@ -1,14 +1,26 @@
 package com.fastcampus.snsproject.configuration;
 
+import com.fastcampus.snsproject.configuration.filter.JwtTokenFilter;
+import com.fastcampus.snsproject.exception.CustomAutthenticationEntryPoint;
+import com.fastcampus.snsproject.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class AuthenticationConfig extends WebSecurityConfigurerAdapter{
+
+    private final UserService userService;
+    @Value("${jwt.secret-key}")
+    private String key;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -16,14 +28,14 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter{
                 .authorizeRequests()
                 .antMatchers("/api/*/users/join", "/api/*/users/login").permitAll()
                 .antMatchers("/api/**").authenticated()
-                //.anyRequest().permitAll()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        ;        //.and()
-                //.exceptionHandling()
-                //.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                //.and()
-                //.addFilterBefore(new JwtTokenFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class);
+                .and()
+                .addFilterBefore(new JwtTokenFilter(key, userService), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling()
+                .authenticationEntryPoint(new CustomAutthenticationEntryPoint())
+        ;
+
     }
 }

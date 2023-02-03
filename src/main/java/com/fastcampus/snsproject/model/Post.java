@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class Post {
 
-    private Integer id = null;
+    private Integer id;
     private String title;
     private String body;
     private User user;

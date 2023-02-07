@@ -1,6 +1,6 @@
 package com.fastcampus.snsproject.repository;
 
-import com.fastcampus.snsproject.model.Post;
+import com.fastcampus.snsproject.model.entity.AlarmEntity;
 import com.fastcampus.snsproject.model.entity.LikeEntity;
 import com.fastcampus.snsproject.model.entity.PostEntity;
 import com.fastcampus.snsproject.model.entity.UserEntity;
@@ -15,15 +15,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface LikeEntityRepository extends JpaRepository<LikeEntity, Integer> {
+public interface AlarmEntityRepository extends JpaRepository<AlarmEntity, Integer> {
 
-    Optional<LikeEntity> findByUserAndPost(UserEntity user, PostEntity post);
+    Page<AlarmEntity> findAllByUserId(Integer userId, Pageable pageable);
 
-    //@Query(value = "SELECT COUNT(*) from LikeEntity entity WHERE entity.post = :post")
-    //Integer countByPost(@Param("post") PostEntity post);
-
-    long countByPost(PostEntity post);
-
-    List<LikeEntity> findAllByPost(PostEntity post);
 
 }

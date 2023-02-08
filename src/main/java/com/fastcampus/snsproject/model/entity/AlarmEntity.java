@@ -22,7 +22,7 @@ import java.time.Instant;
 @Table(name = "\"alarm_ML\"", indexes = {
         @Index(name = "usr_id_idx", columnList = "user_id")
 })
-@SQLDelete(sql = "UPDATE \"alarm\" SET deleted_at = NOW() where id=?")
+@SQLDelete(sql = "UPDATE \"alarm_ML\" SET deleted_at = NOW() where id=?")
 @Where(clause = "deleted_at is NULL")
 @NoArgsConstructor
 public class AlarmEntity {
